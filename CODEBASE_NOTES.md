@@ -98,17 +98,26 @@
 - Dance editor: `app/StackChan/View/Dance.swift`.
 - BLE provisioning/control helper: `app/StackChan/Utils/BlufiUtil.swift`.
 
-## Fixed In Local Working Tree
+## Fork Changes
 
 - Backend WebSocket parser now validates packet length before slicing payload bytes.
 - Backend WebSocket package passes normal `go test ./...` vet settings.
 - Firmware StackChan WebSocket connection now includes `mac=<factoryMac>`.
+- Firmware StackChan update task now runs at lower priority with a longer delay to reduce contention with XiaoZhi audio tasks.
 - iOS `deviceOnline`/`deviceOffline` handling now maps to `true`/`false` respectively.
 - Root helper scripts were added for starting/stopping the Go server:
   - `start.sh`
   - `start.bat`
   - `stop.sh`
   - `stop.bat`
+
+## Local/Private Artifacts
+
+- Full-device flash dumps, extracted partitions, and agent/runtime state are intentionally ignored and should stay out of public commits:
+  - `stackchan-full-*.bin`
+  - `chunks/`
+  - `flash-backup-*/`
+  - `.claude/`
 
 ## Remaining Breakpoints
 
@@ -119,7 +128,6 @@
 
 ## Verification Done
 
-- Cloned repository and fetched ignored firmware dependencies.
 - Ran `go test ./...`: passes.
 - Smoke-tested `start.bat` and `stop.bat`: server starts on port `12800` and stops cleanly.
 - ESP-IDF `idf.py` is not on PATH in this shell, so firmware build was not attempted.
