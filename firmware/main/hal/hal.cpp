@@ -148,7 +148,7 @@ static void _stackchan_update_task(void* param)
     bool is_setup_done    = false;
 
     while (1) {
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(25));
 
         tools::update_reminders();
 
@@ -195,7 +195,7 @@ void Hal::startXiaozhi()
     });
 
     // Start stackchan update task
-    xTaskCreatePinnedToCore(_stackchan_update_task, "stackchan", 4096, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(_stackchan_update_task, "stackchan", 4096, NULL, 2, NULL, 1);
 
     hal_bridge::start_xiaozhi_app();
 }

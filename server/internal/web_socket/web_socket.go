@@ -289,13 +289,13 @@ func parseBinaryMessage(ctx context.Context, msg *[]byte) (byte, int, []byte, bo
 
 	msgType := (*msg)[0]
 	dataLen := int(binary.BigEndian.Uint32((*msg)[1:5]))
-	payload := (*msg)[5 : 5+dataLen]
 
 	if len(*msg)-5 != dataLen {
 		logger.Warningf(ctx, "Length mismatch: header says %d, actual is %d, message not forwarded", dataLen, len(*msg)-5)
 		return 0, 0, nil, false
 	}
 
+	payload := (*msg)[5 : 5+dataLen]
 	return msgType, dataLen, payload, true
 }
 
@@ -521,7 +521,7 @@ func readAppClientMessage(ctx context.Context, client *AppClient, messageType *i
 			// Query device name
 			name, err := service.GetDeviceName(ctx, client.Mac)
 			if err != nil {
-				logger.Errorf(ctx, err.Error())
+				logger.Errorf(ctx, "%s", err.Error())
 				return
 			}
 			if name == "" {
@@ -529,7 +529,7 @@ func readAppClientMessage(ctx context.Context, client *AppClient, messageType *i
 				return
 			}
 			newMsg := createStringMessage(GetDeviceName, name)
-			logger.Infof(ctx, "Device name found, returning: "+name)
+			logger.Infof(ctx, "Device name found, returning: %s", name)
 			forwardMessage(ctx, client.Conn, messageType, newMsg, client.mu)
 			break
 		case UpdateDeviceName:

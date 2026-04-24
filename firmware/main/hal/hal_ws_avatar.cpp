@@ -63,7 +63,8 @@ public:
 
     void init()
     {
-        _url = fmt::format("{}/stackChan/ws?deviceType=StackChan", secret_logic::get_server_url());
+        _url = fmt::format("{}/stackChan/ws?mac={}&deviceType=StackChan", secret_logic::get_server_url(),
+                           GetHAL().getFactoryMacString());
 
         connect();
 

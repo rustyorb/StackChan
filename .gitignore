@@ -1,2 +1,15 @@
 .DS_Store
 .idea/
+server/.stackchan-server.pid
+server/.stackchan-server.log
+server/.stackchan-server.err.log
+server/.stackchan-server
+server/.stackchan-server.exe
+
+# Full-flash backups
+stackchan-full-*.bin
+chunks/
+flash-backup-*/
+
+# Agent/runtime state
+.claude/
