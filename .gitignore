@@ -1,10 +1,20 @@
 .DS_Store
 .idea/
+__pycache__/
+*.pyc
 server/.stackchan-server.pid
 server/.stackchan-server.log
 server/.stackchan-server.err.log
 server/.stackchan-server
 server/.stackchan-server.exe
+server-xz/.stackchan-xz.pid
+server-xz/.stackchan-xz.log
+server-xz/.stackchan-xz.err.log
+server-xz/.stackchan-xz-node.pid
+server-xz/.stackchan-xz-node.log
+server-xz/.stackchan-xz-node.err.log
+server-xz/config.local.json
+logs/
 
 # Full-flash backups
 stackchan-full-*.bin
@@ -13,3 +23,8 @@ flash-backup-*/
 
 # Agent/runtime state
 .claude/
+
+# Personal working notes (local only)
+LOCAL_NOTES.md
+tools/.provision-tmp/
+eim_config.toml

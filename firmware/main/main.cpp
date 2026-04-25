@@ -9,12 +9,18 @@
 #include <mooncake.h>
 #include <apps/apps.h>
 #include <hal/hal.h>
+#include <esp_app_desc.h>
+#include <esp_log.h>
 
 using namespace mooncake;
 using namespace smooth_ui_toolkit;
 
 extern "C" void app_main(void)
 {
+    const auto* app_desc = esp_app_get_description();
+    ESP_LOGW("StackChanFork", "Booting StackChan fork firmware %s built %s %s", app_desc->version,
+             app_desc->date, app_desc->time);
+
     // Setup logger
     mclog::set_level(mclog::level_info);
     mclog::set_time_format(mclog::time_format_unix_milliseconds);

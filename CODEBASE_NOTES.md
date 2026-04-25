@@ -111,6 +111,13 @@
   - `stop.sh`
   - `stop.bat`
 
+## External References
+
+- `espressif/esp-agents-firmware`: official Espressif voice-agent firmware reference. Useful as an information source for M5Stack CoreS3 audio/display/provisioning patterns, but not a current migration target.
+- `xinnan-tech/xiaozhi-esp32-server`: canonical XiaoZhi backend direction. The Codex-hosted shell currently cannot clone it because DNS/thread creation fails, so `server-xz/` remains a local bridgehead until it can be fetched from a normal terminal.
+- Android `StackChan World 1.1.4` APK/folder at `S:\Downloads\StackChan World 1.1.4` is the relevant phone app artifact for this user. It is a Flutter app whose `libapp.so` contains the app backend base `http://47.113.125.164:12800/`, WebSocket `ws://47.113.125.164:12800/stackChan/ws`, and XiaoZhi/account endpoints including `xiaozhi/token`, `xiaozhi/token/refresh`, `xiaozhi/generateLicenseToken`, `api/agents`, `api/agents/devices/activate`, `api/developers/devices`, `api/developers/generate-license`, `api/developers/agent-templates/list`, and `api/user/tts-list`.
+- The Android app also contains BLE/Wi-Fi provisioning strings (`setWifi`, `sendWifiSetData`, `confirmWifi`, `cached_wifi_name`, `cached_wifi_password`, `wifiConnected`, `wifiConnectFailed`) and BLE UUIDs including `e2e5e5e0-1234-5678-1234-56789abcdef0` through `e2e5e5e4-1234-5678-1234-56789abcdef0`, `e2e5e5ff-1234-5678-1234-56789abcdef0`, and FFE1/FFE3/FFE4 characteristics.
+
 ## Local/Private Artifacts
 
 - Full-device flash dumps, extracted partitions, and agent/runtime state are intentionally ignored and should stay out of public commits:
@@ -130,7 +137,14 @@
 
 - Ran `go test ./...`: passes.
 - Smoke-tested `start.bat` and `stop.bat`: server starts on port `12800` and stops cleanly.
-- ESP-IDF `idf.py` is not on PATH in this shell, so firmware build was not attempted.
+- ESP-IDF v5.5.4 is installed at `C:\esp\v5.5.4\esp-idf`, with tools under `C:\Espressif\tools`.
+- In the Codex-hosted shell, `esptool` works but full `idf.py` build is blocked by host Python/Windows provider failures (`_overlapped` / WinError 10106). The user's normal IDF PowerShell Environment should be used for full `idf.py build flash monitor`.
+- `firmware/doctor.bat` runs the v5.5.4 IDF profile, builds, flashes `COM5`, starts monitor, and writes logs under `logs/`.
+- `firmware/monitor.bat` runs monitor only and writes logs under `logs/`.
+- `firmware/flash-app.bat` flashes only `firmware/build/stack-chan.bin` to app slot `0x20000` using `esptool`; it does not erase NVS, assets, or bootloader.
+- `tools/reset_config.bat` erases only the NVS partition at `0x9000` / `0x4000`, forcing Wi-Fi/app provisioning to start over without touching firmware or assets.
+- `server-xz/` defaults to `http://192.168.0.250:8003` and handles both `/xiaozhi/ota/` and `/xiaozhi/v1/ota` so it matches the patched firmware default OTA URL.
+- `server-xz/` serves a local dashboard at `http://192.168.0.250:8003/` for provider URL/key, model, voice, agent name, and system prompt settings. It persists to ignored local file `server-xz/config.local.json` and includes an OpenAI defaults preset for the first end-to-end provider path.
 - `xcodebuild` is not on PATH in this shell, so iOS build was not attempted.
 
 ## First Fix Order
