@@ -43,11 +43,23 @@ extern "C" void app_main(void)
     GetMooncake().installApp(std::make_unique<AppSetup>());
 
     // Main loop
+#if STACKCHAN_DEV_FIRMWARE
+    const auto xiaozhi_auto_start_at = GetHAL().millis() + 8000;
+    bool xiaozhi_auto_start_requested = false;
+#endif
     while (1) {
         GetHAL().feedTheDog();
         GetHAL().updateHeapStatusLog();
 
         GetMooncake().update();
+
+#if STACKCHAN_DEV_FIRMWARE
+        if (!xiaozhi_auto_start_requested && GetHAL().millis() >= xiaozhi_auto_start_at) {
+            xiaozhi_auto_start_requested = true;
+            ESP_LOGW("StackChanFork", "Dev firmware auto-starting XiaoZhi voice mode");
+            GetHAL().requestXiaozhiStart();
+        }
+#endif
 
         if (GetHAL().isXiaozhiStartRequested()) {
             break;
